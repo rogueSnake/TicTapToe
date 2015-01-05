@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Tic Tap Toe</title>
+    </head>
+    <body ng-app ='app'>
+        <div ng-controller='appCtrl'>
+            <h1>
+            Tic Tap Toe
+            </h1>
+            <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.js'></script>
+            <script src='ngApp.js'></script>
+            <ul>
+                <li ng-repeat="row in grid">
+
+                    <button ng-click="mod($index, 'columnA')">
+                    <h1>{{row.columnA}}</h1>
+                    </button>
+
+                    <button ng-click="mod($index, 'columnB')">
+                    <h1>{{row.columnB}}</h1>
+                    </button>
+
+                    <button ng-click="mod($index, 'columnC')">
+                    <h1>{{row.columnC}}</h1>
+                    </button>
+
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
