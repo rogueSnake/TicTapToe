@@ -11,17 +11,17 @@ TTT.app.controller('appCtrl', function ($scope) {
 
     $scope.grid = [];
 
-    for (i=0; i < 3; i += 1) {
+    for (i = 0; i < 3; i += 1) {
         $scope.grid.push(Object.create(protoRow));
     }
 
     $scope.mod = function (row, column) {
 
-        if ($scope.grid[row][column] === "_"){
+        if ($scope.grid[row][column] === "_") {
             $scope.grid[row][column] = "x";
         }
 
-        else if ($scope.grid[row][column] === "x"){
+        else if ($scope.grid[row][column] === "x") {
             $scope.grid[row][column] = "o";
         }
 
