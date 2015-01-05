@@ -8,6 +8,10 @@
             <h1>
             Tic Tap Toe
             </h1>
+            <!-- I'm purposefully slowing down the HTML load-time by injecting the ecmaScript right -->
+            <!-- in the middle of it. Otherwise the raw text of my {{Angular tags}} are visible to -->
+            <!-- the end user. This way the tags have to wait till Angular is ready to do something --> 
+            <!-- with them. There has to be a better way to do this, but I'm not sure what it is. -->
             <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.js'></script>
             <script src='ngApp.js'></script>
             <ul>
