@@ -1,6 +1,6 @@
-var TTT = {},
-    socket = io();
+var TTT = {};
 
+TTT.socket = io();
 TTT.app = angular.module("app", []);
 
 TTT.app.controller("appCtrl", function ($scope) {
@@ -18,10 +18,10 @@ TTT.app.controller("appCtrl", function ($scope) {
     }
 
     $scope.pushMod = function (row, column) {
-        socket.emit("mod", [row, column]);
+        TTT.socket.emit("mod", [row, column]);
     };
 
-    socket.on("mod", function(position) {
+    TTT.socket.on("mod", function(position) {
         var row = position[0],
             column = position[1];
 
