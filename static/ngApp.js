@@ -1,7 +1,9 @@
-var TTT = {};
-TTT.app = angular.module('app', []);
+var TTT = {},
+    socket = io();
 
-TTT.app.controller('appCtrl', function ($scope) {
+TTT.app = angular.module("app", []);
+
+TTT.app.controller("appCtrl", function ($scope) {
     var i = 0,
         protoRow =  {
         columnA: "_",
@@ -15,7 +17,13 @@ TTT.app.controller('appCtrl', function ($scope) {
         $scope.grid.push(Object.create(protoRow));
     }
 
-    $scope.mod = function (row, column) {
+    $scope.pushMod = function (row, column) {
+        socket.emit("mod", [row, column]);
+    };
+
+    socket.on("mod", function(position) {
+        var row = position[0],
+            column = position[1];
 
         if ($scope.grid[row][column] === "_") {
             $scope.grid[row][column] = "x";
@@ -28,5 +36,6 @@ TTT.app.controller('appCtrl', function ($scope) {
         else {
             $scope.grid[row][column] = "_";
         }
-    };
+        $scope.$apply();
+    });
 });
