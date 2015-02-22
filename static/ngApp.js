@@ -1,9 +1,6 @@
 var TTT = {};
 
 TTT.socket = io();
-TTT.socket.on("grid", function (grid) {
-    console.log(grid);
-});
 
 TTT.app = angular.module("app", []);
 
@@ -21,36 +18,38 @@ TTT.app.controller("appCtrl", function ($scope) {
         $scope.grid.push(Object.create(protoRow));
     }
 
-    $scope.pushMod = function (row, column) {
-        TTT.socket.emit("mod", [row, column]);
-    };
-
-    TTT.socket.on("mod", function(position) {
-        var row = position[0],
-            column = position[1];
-
-        if ($scope.grid[row][column] === "?") {
-
-            return;
-        }
-
-        else if ($scope.grid[row][column] === "_") {
-            $scope.grid[row][column] = "x";
-        }
-
-        else if ($scope.grid[row][column] === "x") {
-            $scope.grid[row][column] = "o";
-        }
-
-        else {
-            $scope.grid[row][column] = "_";
-        }
-        $scope.$apply();
-    });
-
     TTT.socket.emit("requestGrid");
     TTT.socket.on("broadcastGrid", function (grid) {
         $scope.grid = grid;
         $scope.$apply();
+    });
+
+    $scope.tapSquare = function (column, row) {
+        TTT.socket.emit("requestChange", {x: column, y: row});
+    };
+
+    TTT.socket.on("broadcastChange", function(position) {
+        var row = position.y,
+            column = position.x,
+            setGrid = function (symbol) {
+                $scope.grid[row][column] = symbol;
+                $scope.$apply();
+            };
+
+        switch ($scope.grid[row][column]) {
+            case "_" :
+                setGrid("x");
+                break;
+            case "x" :
+                setGrid("o");
+                break;
+            case "o" :
+                setGrid("_");
+                break;
+            case "?" :
+                // "?" should only be displayed if the client 
+                // has not yet recieved a broadcastGrid event.
+                break;
+        }
     });
 });

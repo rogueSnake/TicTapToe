@@ -8,5 +8,5 @@ http.listen(3000, function(){
     console.log("Listenin' to port 3000, boss.");
 });
 
-module.exports = io;
+module.exports.io = io;
 

@@ -1,7 +1,8 @@
 var mongoClient = require('mongodb').MongoClient,
-//    connection = mongoClient.connect('mongodb://localhost:8000/TicTapToe'),
+    cachedGrid = [],
     connect = function (callback) {
-        mongoClient.connect('mongodb://localhost:8000/TicTapToe', function(err, db) {
+        mongoClient.connect('mongodb://localhost:8000/TicTapToe',
+                function(err, db) {
 
             if (err) {
 
@@ -9,8 +10,7 @@ var mongoClient = require('mongodb').MongoClient,
             }
             callback(db.collection("grid"));
         });
-    },
-    cachedGrid;
+    };
 
 connect(function (grid) {
     grid.count(function (err, count) {
@@ -69,8 +69,9 @@ module.exports = {
         callback(cachedGrid);
     },
 
-    modGrid : function (x, y) {
-
+    changeGrid : function (position) {
+        var x = position.x,
+            y = position.y;
     }
 };
 
