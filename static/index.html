@@ -3,35 +3,33 @@
     <head>
         <title>Tic Tap Toe</title>
     </head>
-    <body ng-app ="app">
-        <div ng-controller="appCtrl">
-            <h1>
-            Tic Tap Toe
-            </h1>
-            <!-- I'm purposefully slowing down the HTML load-time by injecting the ecmaScript right -->
-            <!-- in the middle of it. Otherwise the raw text of my {{Angular tags}} are visible to -->
-            <!-- the end user. This way the tags have to wait till Angular is ready to do something --> 
-            <!-- with them. There has to be a better way to do this, but I'm not sure what it is. -->
-            <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.js"></script>
-            <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-            <script src="ngApp.js"></script>
-            <ul>
-                <li ng-repeat="row in grid">
+    <body ng-app ="app" ng-controller="appCtrl">
+        <h1>
+        Tic Tap Toe
+        </h1>
 
-                    <button ng-click="pushMod($index, 'columnA')">
-                    <h1>{{row.columnA}}</h1>
-                    </button>
+        <!-- I'm purposefully slowing down the HTML load-time by injecting the ecmaScript right -->
+        <!-- in the middle of it. Otherwise the raw text of my {{Angular tags}} are visible to -->
+        <!-- the end user. This way the tags have to wait till Angular is ready to do something --> 
+        <!-- with them. There has to be a better way to do this, but I'm not sure what it is. -->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script src="ngApp.js"></script>
 
-                    <button ng-click="pushMod($index, 'columnB')">
-                    <h1>{{row.columnB}}</h1>
-                    </button>
+        <div ng-repeat="row in grid">
 
-                    <button ng-click="pushMod($index, 'columnC')">
-                    <h1>{{row.columnC}}</h1>
-                    </button>
+            <button ng-click="pushMod($index, 'columnA')">
+            <h1>{{row.columnA}}</h1>
+            </button>
 
-                </li>
-            </ul>
+            <button ng-click="pushMod($index, 'columnB')">
+            <h1>{{row.columnB}}</h1>
+            </button>
+
+            <button ng-click="pushMod($index, 'columnC')">
+            <h1>{{row.columnC}}</h1>
+            </button>
+
         </div>
     </body>
 </html>

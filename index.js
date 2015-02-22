@@ -1,16 +1,21 @@
-var express = require("express"),
-    app = express(),
-    http = require("http").Server(app),
-    io = require("socket.io")(http);
+var database = require("./database.js"),
+    server = require("./server.js");
 
-app.use(express.static("static"));
+server.on("connection", function (socket) {
 
-io.on("connection", function (socket) {
+    socket.on("requestGrid", function () {
+        database.getGrid(function (grid) {
+            server.emit("broadcastGrid", grid);
+        });
+    });
+/*
+    database.getGrid(function (grid) {
+        console.log(grid);
+        server.emit("broadcastGrid", grid);
+    });
+*/
     socket.on("mod", function (position) {
-        io.emit("mod", position);
+        server.emit("mod", position);
     });
 });
 
-http.listen(3000, function(){
-  console.log("Listenin' to port 3000, boss.");
-});

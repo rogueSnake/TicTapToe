@@ -1,15 +1,19 @@
 var TTT = {};
 
 TTT.socket = io();
+TTT.socket.on("grid", function (grid) {
+    console.log(grid);
+});
+
 TTT.app = angular.module("app", []);
 
 TTT.app.controller("appCtrl", function ($scope) {
     var i = 0,
         protoRow =  {
-        columnA: "_",
-        columnB: "_",
-        columnC: "_"
-    };
+            columnA: "?",
+            columnB: "?",
+            columnC: "?"
+        };
 
     $scope.grid = [];
 
@@ -25,7 +29,12 @@ TTT.app.controller("appCtrl", function ($scope) {
         var row = position[0],
             column = position[1];
 
-        if ($scope.grid[row][column] === "_") {
+        if ($scope.grid[row][column] === "?") {
+
+            return;
+        }
+
+        else if ($scope.grid[row][column] === "_") {
             $scope.grid[row][column] = "x";
         }
 
@@ -36,6 +45,12 @@ TTT.app.controller("appCtrl", function ($scope) {
         else {
             $scope.grid[row][column] = "_";
         }
+        $scope.$apply();
+    });
+
+    TTT.socket.emit("requestGrid");
+    TTT.socket.on("broadcastGrid", function (grid) {
+        $scope.grid = grid;
         $scope.$apply();
     });
 });
