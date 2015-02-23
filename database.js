@@ -1,13 +1,9 @@
 var mongoClient = require('mongodb').MongoClient,
-    cachedGrid = [],
     connect = function (callback) {
         mongoClient.connect('mongodb://localhost:8000/TicTapToe',
                 function(err, db) {
 
-            if (err) {
-
-                return console.error(err);
-            }
+            if (err) {throw err}
             callback(db.collection("grid"));
         });
     };
@@ -15,24 +11,19 @@ var mongoClient = require('mongodb').MongoClient,
 connect(function (grid) {
     grid.count(function (err, count) {
         var i = 0,
-            docs = {},
-            protoRow = {
+            defaultRow = {
                 columnA: "_",
                 columnB: "_",
                 columnC: "_"
             };
 
-        if (err) {
-
-            return console.error(err);
-        }
+        if (err) {throw err}
 
         if (count === 0) {
 
             for (i = 0; i < 3; i += 1) {
-                docs["row" + i] = Object.create(protoRow);
+                grid.insert(Object.create(defaultRow), function () {});
             }
-            grid.insert(docs, function () {});
         }
     });
 });
@@ -40,33 +31,17 @@ connect(function (grid) {
 module.exports = {
 
     getGrid : function (callback) {
-        cachedGrid = [
-            {
-                columnA: "_",
-                columnB: "_",
-                columnC: "_"
-            },
-            {
-                columnA: "_",
-                columnB: "_",
-                columnC: "_"
-            },
-            {
-                columnA: "_",
-                columnB: "_",
-                columnC: "_"
-            }
-        ];
-/*
-        cachedGrid = [];
-
         connect(function (grid) {
-            grid.find().forEach(function (row) {
-                cachedGrid.push(row);
+            grid.find(function (err, cursor) {
+
+                if (err) {throw err}
+                cursor.toArray(function (err, rows) {
+
+                    if (err) {throw err}
+                    callback(rows);
+                });
             });
         });
-*/
-        callback(cachedGrid);
     },
 
     changeGrid : function (position) {

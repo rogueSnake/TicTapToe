@@ -6,16 +6,16 @@ TTT.app = angular.module("app", []);
 
 TTT.app.controller("appCtrl", function ($scope) {
     var i = 0,
-        protoRow =  {
-            columnA: "?",
-            columnB: "?",
-            columnC: "?"
+        unsyncedRow =  {
+            columnA: " ",
+            columnB: " ",
+            columnC: " "
         };
 
     $scope.grid = [];
 
     for (i = 0; i < 3; i += 1) {
-        $scope.grid.push(Object.create(protoRow));
+        $scope.grid.push(Object.create(unsyncedRow));
     }
 
     TTT.socket.emit("requestGrid");
@@ -45,10 +45,6 @@ TTT.app.controller("appCtrl", function ($scope) {
                 break;
             case "o" :
                 setGrid("_");
-                break;
-            case "?" :
-                // "?" should only be displayed if the client 
-                // has not yet recieved a broadcastGrid event.
                 break;
         }
     });
