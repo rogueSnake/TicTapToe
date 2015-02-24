@@ -12,10 +12,11 @@ var rowIds = [],
 connect(function (grid) {
     grid.count(function (err, count) {
         var i = 0,
+            tempRow = {},
             defaultRow = {
-                columnA: "_",
-                columnB: "_",
-                columnC: "_"
+                "columnA": "_",
+                "columnB": "_",
+                "columnC": "_"
             };
 
         if (err) {throw err}
@@ -23,23 +24,10 @@ connect(function (grid) {
         if (count === 0) {
 
             for (i = 0; i < 3; i += 1) {
-                grid.insert(Object.create(defaultRow), function (err, row) {
-
-                    if (err) {throw err}
-                    rowIds.push(row._id);
-                });
+                tempRow = Object.create(defaultRow);
+                tempRow.row = i;
+                grid.insert(tempRow, function () {});
             }
-        }
-
-        else {
-            grid.find(function (err, cursor){
-
-                if (err) {throw err}
-                cursor.each(function (err, row) {
-                    if (err) {throw err}
-                    rowIds.push(row._id);
-                });
-            });
         }
     });
 });
@@ -63,30 +51,31 @@ module.exports = {
     changeGrid : function (position) {
         var rowId = rowIds[position.y],
             columnUpdate = {},
-            oldSymbol,
             newSymbol;
 
         connect(function (grid) {
-            grid.find({_id: rowId}, function (err, row) {
+            grid.find({row: position.y}, function (err, cursor) {
 
                 if (err) {throw err}
-                oldSymbol = row[position.x];
-            })
+                cursor.toArray(function (err, rows) {
 
-            switch (oldSymbol) {
-                case "_" :
-                    newSymbol = "x";
-                    break;
-                case "x" :
-                    newSymbol = "o";
-                    break;
-                case "o" :
-                    newSymbol = "_";
-                    break;
-            }
-            columnUpdate[position.x] = newSymbol;
-            // I'm not sure why, but this doesn't really update the stored grid.
-            grid.update({_id : rowId}, {$set : columnUpdate}, function () {});
+                    if (err) {throw err}
+
+                    switch (rows[0][position.x]) {
+                        case "_" :
+                            newSymbol = "x";
+                            break;
+                        case "x" :
+                            newSymbol = "o";
+                            break;
+                        case "o" :
+                            newSymbol = "_";
+                            break;
+                    }
+                    columnUpdate[position.x] = newSymbol;
+                    grid.update({row: position.y}, {$set : columnUpdate}, function () {});
+                });
+            });
         });
     }
 };
