@@ -15,8 +15,8 @@
         <!-- something with them. There has to be a better way to do this, -->
         <!-- but I'm not sure what it is. -->
 
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.18/angular.js"></script>
-        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <script src="angular.js"></script>
+        <script src="socketIo.js"></script>
         <script src="ngApp.js"></script>
 
         <div ng-repeat="row in grid">

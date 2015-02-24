@@ -1,4 +1,5 @@
-var mongoClient = require('mongodb').MongoClient,
+var rowIds = [],
+    mongoClient = require('mongodb').MongoClient,
     connect = function (callback) {
         mongoClient.connect('mongodb://localhost:8000/TicTapToe',
                 function(err, db) {
@@ -22,8 +23,23 @@ connect(function (grid) {
         if (count === 0) {
 
             for (i = 0; i < 3; i += 1) {
-                grid.insert(Object.create(defaultRow), function () {});
+                grid.insert(Object.create(defaultRow), function (err, row) {
+
+                    if (err) {throw err}
+                    rowIds.push(row._id);
+                });
             }
+        }
+
+        else {
+            grid.find(function (err, cursor){
+
+                if (err) {throw err}
+                cursor.each(function (err, row) {
+                    if (err) {throw err}
+                    rowIds.push(row._id);
+                });
+            });
         }
     });
 });
@@ -45,8 +61,33 @@ module.exports = {
     },
 
     changeGrid : function (position) {
-        var x = position.x,
-            y = position.y;
+        var rowId = rowIds[position.y],
+            columnUpdate = {},
+            oldSymbol,
+            newSymbol;
+
+        connect(function (grid) {
+            grid.find({_id: rowId}, function (err, row) {
+
+                if (err) {throw err}
+                oldSymbol = row[position.x];
+            })
+
+            switch (oldSymbol) {
+                case "_" :
+                    newSymbol = "x";
+                    break;
+                case "x" :
+                    newSymbol = "o";
+                    break;
+                case "o" :
+                    newSymbol = "_";
+                    break;
+            }
+            columnUpdate[position.x] = newSymbol;
+            // I'm not sure why, but this doesn't really update the stored grid.
+            grid.update({_id : rowId}, {$set : columnUpdate}, function () {});
+        });
     }
 };
 

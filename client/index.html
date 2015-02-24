@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Tic Tap Toe</title>
+    </head>
+    <body ng-app ="app" ng-controller="appCtrl">
+        <h1>
+        Tic Tap Toe
+        </h1>
+
+        <div ng-repeat="row in grid">
+
+            <button ng-click="tapSquare('columnA', $index)">
+            <h1>{{row.columnA}}</h1>
+            </button>
+
+            <button ng-click="tapSquare('columnB', $index)">
+            <h1>{{row.columnB}}</h1>
+            </button>
+
+            <button ng-click="tapSquare('columnC', $index)">
+            <h1>{{row.columnC}}</h1>
+            </button>
+
+        </div>
+        <script src="angular.js"></script>
+        <script src="socketIo.js"></script>
+        <script src="ngApp.js"></script>
+    </body>
+</html>
